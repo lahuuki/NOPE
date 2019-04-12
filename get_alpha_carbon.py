@@ -1,7 +1,8 @@
 import sys
+import pandas as pd
 
 class AC(object):
-	def __init__(self, position, aa, x, y, z, b):
+	def __init__(self, position, aa, x=0, y=0, z=0, b=0):
 		self.position = int(position)
 		self.aa = aa
 		self.x = float(x)
@@ -23,9 +24,43 @@ def get_alpha_carbon(pdb_fn, b_factor):
 	
 	return [a for a in pdb_alpha if a.b <= b_factor]
 	
-my_pdb = sys.argv[1]
-my_bf = float(sys.argv[2])
+def build_grid_1D(alpha_list, block, grid_rad):
+	"""prototype for build grid 3d"""
+	block_rad = block/2
+	grid_size = (grid_rad*2)+1
+	for target in alpha_list:
+		print(f"Target = {target}")
+		center = target.x
+		adj_acs = [AC(a.position,a.aa, (grid_rad + ((a.x - center)+block_rad)//block)) for a in alpha_list]
+		# for a in adj_acs:
+			# if a.x == grid_rad +1:
+				# print(a)
+		map = []
+		for i in range(grid_size):
+			a_here = 'o'
+			for a in adj_acs:
+				if i == a.x:
+					a_here = (a.aa)
+			map.append(a_here)
+					
+		print(map)
+	
+	
+	
+# my_pdb = sys.argv[1]
+##for no cut off make b_factor cutoff 'inf'
+# my_bf = float(sys.argv[2])
 
-my_acs = get_alpha_carbon(my_pdb, my_bf)
-for a in my_acs:
+# my_acs = get_alpha_carbon(my_pdb, my_bf)
+# for a in my_acs:
+	# print(a)
+	
+test_aa = ['A', 'R', 'N', 'D', 'C', 'E', 'Q']	
+test_alphas_1D = []
+for i,aa in enumerate(test_aa):
+	test_alphas_1D.append(AC(i,aa,i))
+	
+for a in test_alphas_1D:
 	print(a)
+
+build_grid_1D(test_alphas_1D,1,2)
