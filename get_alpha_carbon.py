@@ -14,15 +14,17 @@ class AC(object):
 		return f"{self.position}:{self.aa}\t({self.x},{self.y},{self.z})\tb={self.b}"
 		
 
-def get_alpha_carbon(pdb_fn, b_factor):  
-	"""Input is pdb filename and B-factor cut off returns list of AC objects that have a B-factor below the cutoff value."""
+def get_alpha_carbon(pdb_fn, top_b_factor):  
+	"""Input is pdb filename and B-factor cut off returns list of AC objects that have a B-factor above the cutoff normalized value."""
 	pd_lines = [l.split() for l in open(pdb_fn, "r").read().splitlines()]
 	pdb_alpha = [AC(l[5],l[3],l[6],l[7],l[8],l[-2]) for l in pd_lines if l[0] == 'ATOM' and l[2] == 'CA']
 	# print(len(pdb_alpha))
 	# for ac in pdb_alpha:
 		# print(ac)
+	b_max = max([ac.b for ac in pdb_alpha])
+	b_cutoff = bmax - bmax*top_b_factor
 	
-	return [a for a in pdb_alpha if a.b <= b_factor]
+	return [a for a in pdb_alpha if a.b >= b_cutoff]
 	
 def build_grid_1D(alpha_list, block, grid_rad):
 	"""prototype for build grid 3d"""
