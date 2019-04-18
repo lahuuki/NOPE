@@ -12,7 +12,6 @@ class AC(object):
 	def __str__(self):
 		return f"{self.position}:{self.aa}\t({self.x},{self.y},{self.z})"
 		
-
 def get_alpha_carbon_pdb(pdb_fn):  
 	"""Input is pdb filename returns list of AC objects"""
 	pd_lines = [l.split() for l in open(pdb_fn, "r").read().splitlines()if len(l.split()) > 3]
@@ -70,5 +69,3 @@ def grid_info(grid):
 	n_aa = [len(cube) for cube in grid_list]
 	return len(grid_list), max(n_aa), sum(n_aa)
 
-
-		
