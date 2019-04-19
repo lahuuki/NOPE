@@ -4,6 +4,7 @@ import matplotlib.pylab as plt
 from get_alpha_carbon import file_to_grid
 
 def xy_heatmap(filename, dim):
+	"""plot a heatmap of the xy dimesion"""
 	print("making grid...")
 	xyz_grid = file_to_grid(filename, dim)
 	xy_grid = []
@@ -18,4 +19,3 @@ def xy_heatmap(filename, dim):
 	plt.title(filename)
 	plt.show()
 	
-xy_heatmap("PDB/1fnt.cif",2.4)

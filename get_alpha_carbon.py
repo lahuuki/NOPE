@@ -15,12 +15,14 @@ class AC(object):
 
 def get_alpha_carbon_pdb(pdb_fn):  
 	"""Input is pdb filename returns list of AC objects"""
+	
 	pd_lines = [l.split() for l in open(pdb_fn, "r").read().splitlines()if len(l.split()) > 3]
 	pdb_alpha = [AC(l[5],l[3],l[6],l[7],l[8]) for l in pd_lines if l[0] == 'ATOM' and l[2] == 'CA']
 	return pdb_alpha
 
 def get_alpha_carbon_cif(cif_fn):  
 	"""Input is cif filename returns list of AC objects"""
+	
 	pd_lines = [l.split() for l in open(cif_fn, "r").read().splitlines()if len(l.split()) > 3]
 	pdb_alpha = [AC(l[8],l[5],l[10],l[11],l[12]) for l in pd_lines if l[0] == 'ATOM' and l[3] == 'CA']
 	return pdb_alpha	
@@ -30,6 +32,7 @@ def get_min_max(ac_list, dim):
 
 def get_alpha_carbon(pdb_fn, top_b_factor):  
 	"""Input is pdb filename and B-factor cut off returns list of AC objects that have a B-factor above the cutoff normalized value."""
+	
 	pd_lines = [l.split() for l in open(pdb_fn, "r").read().splitlines()]
 	pdb_alpha = [AC(l[5],l[3],l[6],l[7],l[8],l[-2]) for l in pd_lines if l[0] == 'ATOM' and l[2] == 'CA']
 	# print(len(pdb_alpha))
@@ -42,6 +45,7 @@ def get_alpha_carbon(pdb_fn, top_b_factor):
 	
 def build_grid_1D(alpha_list, block, grid_rad):
 	"""prototype for build grid 3d"""
+	
 	block_rad = block/2
 	grid_size = (grid_rad*2)+1
 	for target in alpha_list:
@@ -69,6 +73,8 @@ def build_grid_1D(alpha_list, block, grid_rad):
 
 
 def split_dim(ac_list, d, dim, min, max):
+	"""returns a list of list of ACs split at d in the dimesion (x,y,z)"""
+	
 	split_list = []
 	back_edge = min
 	s = 0
@@ -91,7 +97,9 @@ def split_dim(ac_list, d, dim, min, max):
 	#print(f"ACS {len(ac_list)} split {dim} = {[len(slice) for slice in split_list]}")
 	return split_list
 	
-def draw_grid(ac_list, d = 3):
+def draw_grid(ac_list, d):
+	"""returns 3d list of alpha carbons (or blank space) arragned in cubes"""
+	
 	min_x, max_x = get_min_max(ac_list, 'x')
 	min_y, max_y = get_min_max(ac_list, 'y')
 	min_z, max_z = get_min_max(ac_list, 'z')
@@ -113,11 +121,15 @@ def draw_grid(ac_list, d = 3):
 	return xyz_split
 	
 def grid_info(grid):
+	"""returns number of cubes, max number of alpha carbons per cube, and total number of alpha carbons in grid"""
+	
 	grid_list = list(chain.from_iterable(list(chain.from_iterable(grid))))
 	n_aa = [len(cube) for cube in grid_list]
 	return len(grid_list), max(n_aa), sum(n_aa)
 
 def file_to_grid(filename, dim):
+	"""returns grid from pdb file with specified dim"""
+	
 	filetype = filename.split('.')[-1]
 	acs = []
 	if filetype == "cif":

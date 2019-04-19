@@ -4,6 +4,7 @@ from tqdm import tqdm
 import time
 """
 Test draw grid over all of the input files, get a maximum cube dimension for each file
+some times couses crash...work in progress
 """
 
 cifs = glob.glob("PDB/*.cif")
