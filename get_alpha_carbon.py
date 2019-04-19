@@ -2,7 +2,7 @@ from operator import attrgetter
 from itertools import chain
 
 class AC(object):
-	def __init__(self, position, aa, x=0, y=0, z=0, b=0):
+	def __init__(self, position, aa, x=0, y=0, z=0):
 		self.position = int(position)
 		self.aa = aa
 		self.x = float(x)
@@ -47,6 +47,7 @@ def split_dim(ac_list, d, dim, min, max):
 		back_edge = front_edge
 		split_list.append(slice_list)
 		s += 1
+	
 	#print(f"ACS {len(ac_list)} split {dim} = {[len(slice) for slice in split_list]}")
 	return split_list
 	
@@ -54,21 +55,39 @@ def draw_grid(ac_list, d = 3):
 	min_x, max_x = get_min_max(ac_list, 'x')
 	min_y, max_y = get_min_max(ac_list, 'y')
 	min_z, max_z = get_min_max(ac_list, 'z')
+	# x split
 	x_split = split_dim(ac_list, d, 'x', min_x, max_x)
+	# y split
 	xy_split = []
 	for x_slice in x_split:
 		xy_split.append(split_dim(x_slice,d,'y',min_y,max_y))
+	# z split
 	xyz_split = []
 	for xy_slice in xy_split:
+		z_list = []
 		for y_slice in xy_slice:
-			xyz_split.append(split_dim(y_slice, d, 'z', min_z, max_z))
-	
+			z_list.append(split_dim(y_slice, d, 'z', min_z, max_z))
+		xyz_split.append(z_list)
+	#print dimensions
+	# print(f"x = {len(xyz_split)}, y = {len(xyz_split[0])}, z = {len(xyz_split[0][0])}")
 	return xyz_split
 	
 def grid_info(grid):
-	grid_list = list(chain.from_iterable(grid))
+	grid_list = list(chain.from_iterable(list(chain.from_iterable(grid))))
 	n_aa = [len(cube) for cube in grid_list]
 	return len(grid_list), max(n_aa), sum(n_aa)
 
-#test test
-		
+def file_to_grid(filename, dim):
+	filetype = filename.split('.')[-1]
+	acs = []
+	if filetype == "cif":
+		acs = get_alpha_carbon_cif(filename)
+	elif filetype == 'pdb':
+		acs = get_alpha_carbon_pdb(filename)
+	else:
+		print("Error worng file type")
+		return None
+	grid = draw_grid(acs, dim)
+	n_cubes, max_aa, n_ac_inGrid = grid_info(grid)
+	print(f"{filename} with AC dim {dim} produced a grid with {n_cubes} cubes with {max_aa} per cube")
+	return grid

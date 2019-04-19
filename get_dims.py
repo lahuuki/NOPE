@@ -10,15 +10,15 @@ cifs = glob.glob("PDB/*.cif")
 dims = []
 out = open("all_cif_dim.csv", "w")
 out.write("file,n_AC,n_AC_inGrid,n_cubes,max_dim\n")
-for c in tqdm(cifs):
+for c in tqdm(cifs[264:]):
 	result = ""
 	timeout = time.time() + 60
 	try:
 		acs = get_alpha_carbon_cif(c)
 		for i in range(40,0,-1):
 			dim = i/10	
-			actin_grid = draw_grid(acs,dim)
-			n_cubes, max_aa, n_ac_inGrid = grid_info(actin_grid)
+			grid = draw_grid(acs,dim)
+			n_cubes, max_aa, n_ac_inGrid = grid_info(grid)
 			if max_aa == 1:
 				dims.append(dim)
 				result = f"{len(acs)},{n_ac_inGrid},{n_cubes},{dim}"
