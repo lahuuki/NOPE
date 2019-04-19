@@ -28,6 +28,46 @@ def get_alpha_carbon_cif(cif_fn):
 def get_min_max(ac_list, dim):
 	return getattr(min(ac_list, key = attrgetter(dim)),dim), getattr(max(ac_list, key = attrgetter(dim)),dim)
 
+def get_alpha_carbon(pdb_fn, top_b_factor):  
+	"""Input is pdb filename and B-factor cut off returns list of AC objects that have a B-factor above the cutoff normalized value."""
+	pd_lines = [l.split() for l in open(pdb_fn, "r").read().splitlines()]
+	pdb_alpha = [AC(l[5],l[3],l[6],l[7],l[8],l[-2]) for l in pd_lines if l[0] == 'ATOM' and l[2] == 'CA']
+	# print(len(pdb_alpha))
+	# for ac in pdb_alpha:
+		# print(ac)
+	b_max = max([ac.b for ac in pdb_alpha])
+	b_cutoff = bmax - bmax*top_b_factor
+	
+	return [a for a in pdb_alpha if a.b >= b_cutoff]
+	
+def build_grid_1D(alpha_list, block, grid_rad):
+	"""prototype for build grid 3d"""
+	block_rad = block/2
+	grid_size = (grid_rad*2)+1
+	for target in alpha_list:
+		print(f"Target = {target}")
+		center = target.x
+		adj_acs = [AC(a.position,a.aa, (grid_rad + ((a.x - center)+block_rad)//block)) for a in alpha_list]
+		# for a in adj_acs:
+			# if a.x == grid_rad +1:
+				# print(a)
+		map = []
+		for i in range(grid_size):
+			a_here = 'o'
+			for a in adj_acs:
+				if i == a.x:
+					a_here = (a.aa)
+			map.append(a_here)
+					
+		print(map)
+	
+	
+	
+# my_pdb = sys.argv[1]
+##for no cut off make b_factor cutoff 'inf'
+# my_bf = float(sys.argv[2])
+
+
 def split_dim(ac_list, d, dim, min, max):
 	split_list = []
 	back_edge = min
