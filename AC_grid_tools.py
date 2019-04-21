@@ -112,3 +112,28 @@ def file_to_grid(filename, cd):
 	n_cubes, max_aa, n_ac_inGrid = grid_info(grid)
 	print(f"{filename} with AC dim {cd} produced a grid with {n_cubes} cubes with {max_aa} per cube")
 	return grid
+
+def file_to_tfin(filename,gps,anno):
+    """from file, return subgrids for each AA and its epitope annotation. gps = grids per side of cube """
+    
+    pro = file_to_grid(filename.upper(),3)
+
+cubelist = []
+for x in range(len(pro)):
+    for y in range(len(pro[x])):
+        for z in range(len(pro[x][y])):
+            for cube in pro[x][y][z]:
+                if any(isinstance(cube,AC) for cube in pro[x][y][z]):
+                    cubel = []
+                    for l in pro[(x-3):(x+3)]:
+                        cubeh = []
+                        for h in l[(y-3):(y+3)]:
+                            cubew = []
+                            for w in h[(z-3):(z+3)]:
+                                for obj in w:
+                                    if any(isinstance(obj,AC) for obj in w):
+                                        w = obj.aa
+                                cubew.append(w)
+                            cubeh.append(cubew)
+                        cubel.append(cubeh)
+                    cubelist.append(cubel)
