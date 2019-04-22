@@ -113,27 +113,52 @@ def file_to_grid(filename, cd):
 	print(f"{filename} with AC dim {cd} produced a grid with {n_cubes} cubes with {max_aa} per cube")
 	return grid
 
-def file_to_tfin(filename,gps,anno):
+def file_to_tfin(filename,gps):
     """from file, return subgrids for each AA and its epitope annotation. gps = grids per side of cube """
     
     pro = file_to_grid(filename.upper(),3)
-
+    struc = filename.split('.')[0].upper()
+struc = '1A00'
 cubelist = []
 for x in range(len(pro)):
     for y in range(len(pro[x])):
         for z in range(len(pro[x][y])):
             for cube in pro[x][y][z]:
                 if any(isinstance(cube,AC) for cube in pro[x][y][z]):
+                    if cube.position in epi_anno[struc]:
+                            call = 1
+                    else:
+                            call = 0
                     cubel = []
-                    for l in pro[(x-3):(x+3)]:
+                    xs = x-3 
+                    if xs < 0:
+                        xs = 0
+                    xf = x+3
+                    if xf > len(pro):
+                        xf = len(pro)
+                    for l in pro[xs:xf]:
                         cubeh = []
-                        for h in l[(y-3):(y+3)]:
+                        ys = y-3
+                        if ys < 0:
+                            ys = 0
+                        yf = y+3
+                        if yf > len(l):
+                            yf = len(l)
+                        for h in l[ys:yf]:
                             cubew = []
-                            for w in h[(z-3):(z+3)]:
+                            zs = z-3
+                            if zs < 0:
+                                zs = 0
+                            zf = z+3
+                            if zf > len(h):
+                                zf = len(h)
+                            for w in h[zs:zf]:
                                 for obj in w:
                                     if any(isinstance(obj,AC) for obj in w):
                                         w = obj.aa
                                 cubew.append(w)
                             cubeh.append(cubew)
                         cubel.append(cubeh)
-                    cubelist.append(cubel)
+                    cubelist.append([cubel,call])
+
+    
