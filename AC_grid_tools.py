@@ -113,52 +113,90 @@ def file_to_grid(filename, cd):
 	print(f"{filename} with AC dim {cd} produced a grid with {n_cubes} cubes with {max_aa} per cube")
 	return grid
 
-def file_to_tfin(filename,gps):
+def file_to_tfin(filename,griddim,gps):
     """from file, return subgrids for each AA and its epitope annotation. gps = grids per side of cube """
-    
-    pro = file_to_grid(filename.upper(),3)
+    """should probably get optimal grid dimensions and then run this on every protein"""
+    pro = file_to_grid(filename,griddim)
     struc = filename.split('.')[0].upper()
-struc = '1A00'
-cubelist = []
-for x in range(len(pro)):
-    for y in range(len(pro[x])):
-        for z in range(len(pro[x][y])):
-            for cube in pro[x][y][z]:
-                if any(isinstance(cube,AC) for cube in pro[x][y][z]):
-                    if cube.position in epi_anno[struc]:
-                            call = 1
-                    else:
-                            call = 0
-                    cubel = []
-                    xs = x-3 
-                    if xs < 0:
-                        xs = 0
-                    xf = x+3
-                    if xf > len(pro):
-                        xf = len(pro)
-                    for l in pro[xs:xf]:
-                        cubeh = []
-                        ys = y-3
-                        if ys < 0:
-                            ys = 0
-                        yf = y+3
-                        if yf > len(l):
-                            yf = len(l)
-                        for h in l[ys:yf]:
-                            cubew = []
-                            zs = z-3
-                            if zs < 0:
-                                zs = 0
-                            zf = z+3
-                            if zf > len(h):
-                                zf = len(h)
-                            for w in h[zs:zf]:
-                                for obj in w:
-                                    if any(isinstance(obj,AC) for obj in w):
-                                        w = obj.aa
-                                cubew.append(w)
-                            cubeh.append(cubew)
-                        cubel.append(cubeh)
-                    cubelist.append([cubel,call])
-
+    cubelist = []
+    for x in range(len(pro)):
+        for y in range(len(pro[x])):
+            for z in range(len(pro[x][y])):
+                for cube in pro[x][y][z]:
+                    if any(isinstance(cube,AC) for cube in pro[x][y][z]):
+                        if cube.position in epi_anno[struc]:
+                                call = 1
+                        else:
+                                call = 0
+                        cubel = []
+                        xs = x-int((gps-1)/2)-1 
+                        if xs < 0:
+                            for i in range(-1*xs):
+                                twod = []
+                                for i in range(gps):
+                                    oned = []
+                                    for i in range(gps):
+                                        oned.append([])
+                                    twod.append(oned)
+                                cubel.append(twod)
+                            xs = 0
+                        xf = x+int((gps-1)/2)
+                        xplus = 0
+                        if xf > len(pro):
+                            xplus += (xf-len(pro))
+                            xf = len(pro)
+                        for l in pro[xs:xf]:
+                            cubeh = []
+                            ys = y-int((gps-1)/2)-1
+                            if ys < 0:
+                                for i in range(-1*ys):
+                                    onel = []
+                                    for g in range(gps):
+                                        onel.append([])
+                                    cubeh.append(onel)
+                                ys = 0
+                            yf = y+int((gps-1)/2)
+                            yplus = 0
+                            if yf > len(l):
+                                yplus += (yf - len(l))
+                                yf = len(l)
+                            for h in l[ys:yf]:
+                                cubew = []
+                                zs = z-int((gps-1)/2)-1
+                                if zs < 0:
+                                    for i in range(-1*zs):
+                                        cubew.append([])
+                                    zs = 0
+                                zf = z+int((gps-1)/2)
+                                zplus = 0
+                                if zf > len(h):
+                                    zplus += (zf - len(h))
+                                    zf = len(h)
+                                for w in h[zs:zf]:
+                                    for obj in w:
+                                        if any(isinstance(obj,AC) for obj in w):
+                                            w = obj.aa
+                                    cubew.append(w)
+                                    if zplus > 0:
+                                        for i in range(zplus):
+                                            cubew.append([])
+                                cubeh.append(cubew)
+                                if yplus > 0:
+                                    for i in range(yplus):
+                                        onel = []
+                                        for g in range(gps):
+                                            onel.append([])
+                                    cubeh.append(onel)
+                            cubel.append(cubeh)
+                            if xplus > 0:
+                                for i in range(xplus):
+                                    twod = []
+                                    for g in range(gps):
+                                        oned = []
+                                        for g in range(gps):
+                                            oned.append([])
+                                        twod.append(oned)
+                                    cubel.append(twod)
+                        cubelist.append([cubel,call])
+    return cubelist
     
