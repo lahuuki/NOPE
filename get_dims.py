@@ -8,8 +8,8 @@ some times couses crash...work in progress
 """
 
 cifs = glob.glob("PDB/*.cif")
-out = open("all_cif_dim.csv", "w")
-out.write("file,n_AC,n_AC_inGrid,n_cubes,max_dim\n")
+out = open("all_cif_cd.csv", "w")
+out.write("file,n_AC,n_AC_inGrid,n_cubes,max_cd\n")
 for c in tqdm(cifs[264:]):
 	result = ""
 	timeout = time.time() + 60
