@@ -2,7 +2,7 @@ from operator import attrgetter
 from itertools import chain
 
 #read in Epitope annotation file
-ea_lines = open("Epitope_anno.tsv",'r').read().splitlines()
+ea_lines = open("searchable_2.tsv",'r').read().splitlines()
 epi_anno = {}
 for e in ea_lines:
 	protein = e.split("\t")[0]
@@ -113,11 +113,18 @@ def file_to_grid(filename, cd):
 	print(f"{filename} with AC dim {cd} produced a grid with {n_cubes} cubes with {max_aa} per cube")
 	return grid
 
+def subgrid(grid):
+	for ix,x in enumerate(grid):
+		for iy,y in enumerate(x):
+			for iz,z in enumerate(y):
+				if z: #if cube is not empty
+					print(f"({ix},{iy},{iz})\t{z[0]}")
+
 def file_to_tfin(filename,griddim,gps):
     """from file, return subgrids for each AA and its epitope annotation. gps = grids per side of cube """
     """should probably get optimal grid dimensions and then run this on every protein"""
     pro = file_to_grid(filename,griddim)
-    struc = filename.split('.')[0].upper()
+    struc = get_base_fn(filename)
     cubelist = []
     for x in range(len(pro)):
         for y in range(len(pro[x])):
