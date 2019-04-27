@@ -11,14 +11,54 @@ for e in ea_lines:
 
 
 class AC(object):
-	def __init__(self, position, aa, x=0, y=0, z=0, epi= False):
+	def __init__(self, position, aa, x=0, y=0, z=0, epi= False, pi = 0):
 		self.position = int(position)
 		self.aa = aa
 		self.x = float(x)
 		self.y = float(y)
 		self.z = float(z)
 		self.epi = epi
-
+		if self.aa = 'GLY':
+			pi = 5.97
+		if self.aa = 'ALA':
+			pi = 6
+		if self.aa = 'VAL':
+			pi = 5.96
+		if self.aa = 'LEU':
+			pi = 5.98
+		if self.aa = 'ILE':
+			pi = 6.02
+		if self.aa = 'MET':
+			pi = 5.74
+		if self.aa = 'PRO':
+			pi = 6.30
+		if self.aa = 'PHE':
+			pi = 5.48
+		if self.aa = 'TRP':
+			pi = 5.89
+		if self.aa = 'ASN':
+			pi = 5.41
+		if self.aa = 'GLN':
+			pi = 5.65
+		if self.aa = 'SER':
+			pi = 5.68
+		if self.aa = 'THR':
+			pi = 5.60
+		if self.aa = 'TYR':
+			pi = 5.66
+		if self.aa = 'CYS':
+			pi = 5.07
+		if self.aa = 'ASP':
+			pi = 2.77
+		if self.aa = 'GLU':
+			pi = 3.22
+		if self.aa = 'LYS':
+			pi = 9.74
+		if self.aa = 'ARG':
+			pi = 10.76
+		if self.aa = 'HIS':
+			pi = 7.59
+		self.pi = pi
 	def __str__(self):
 		return f"{self.position}:{self.aa} {self.epi}\t({self.x},{self.y},{self.z})"
 
