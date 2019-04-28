@@ -18,45 +18,45 @@ class AC(object):
 		self.y = float(y)
 		self.z = float(z)
 		self.epi = epi
-		if self.aa = 'GLY':
+		if self.aa == 'GLY':
 			pi = 5.97
-		if self.aa = 'ALA':
+		if self.aa == 'ALA':
 			pi = 6
-		if self.aa = 'VAL':
+		if self.aa == 'VAL':
 			pi = 5.96
-		if self.aa = 'LEU':
+		if self.aa == 'LEU':
 			pi = 5.98
-		if self.aa = 'ILE':
+		if self.aa == 'ILE':
 			pi = 6.02
-		if self.aa = 'MET':
+		if self.aa == 'MET':
 			pi = 5.74
-		if self.aa = 'PRO':
+		if self.aa == 'PRO':
 			pi = 6.30
-		if self.aa = 'PHE':
+		if self.aa == 'PHE':
 			pi = 5.48
-		if self.aa = 'TRP':
+		if self.aa == 'TRP':
 			pi = 5.89
-		if self.aa = 'ASN':
+		if self.aa == 'ASN':
 			pi = 5.41
-		if self.aa = 'GLN':
+		if self.aa == 'GLN':
 			pi = 5.65
-		if self.aa = 'SER':
+		if self.aa == 'SER':
 			pi = 5.68
-		if self.aa = 'THR':
+		if self.aa == 'THR':
 			pi = 5.60
-		if self.aa = 'TYR':
+		if self.aa == 'TYR':
 			pi = 5.66
-		if self.aa = 'CYS':
+		if self.aa == 'CYS':
 			pi = 5.07
-		if self.aa = 'ASP':
+		if self.aa == 'ASP':
 			pi = 2.77
-		if self.aa = 'GLU':
+		if self.aa == 'GLU':
 			pi = 3.22
-		if self.aa = 'LYS':
+		if self.aa == 'LYS':
 			pi = 9.74
-		if self.aa = 'ARG':
+		if self.aa == 'ARG':
 			pi = 10.76
-		if self.aa = 'HIS':
+		if self.aa == 'HIS':
 			pi = 7.59
 		self.pi = pi
 	def __str__(self):
@@ -176,7 +176,7 @@ def file_to_tfin(filename,griddim,gps):
                         else:
                                 call = 0
                         cubel = []
-                        xs = x-int((gps-1)/2)-1 
+                        xs = x-int((gps-1)/2)-1
                         if xs < 0:
                             for i in range(-1*xs):
                                 twod = []
@@ -246,4 +246,3 @@ def file_to_tfin(filename,griddim,gps):
                                     cubel.append(twod)
                         cubelist.append([cubel,call])
     return cubelist
-    
