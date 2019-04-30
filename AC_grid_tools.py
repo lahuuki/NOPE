@@ -11,7 +11,7 @@ for e in ea_lines:
 
 
 class AC(object):
-	def __init__(self, position, aa, x=0, y=0, z=0, epi= False, pi = 0):
+	def __init__(self, position, aa, x=0, y=0, z=0, epi= False, pi = 5.97):
 		self.position = int(position)
 		self.aa = aa
 		self.x = float(x)
