@@ -246,3 +246,11 @@ def file_to_tfin(filename,griddim,gps):
                                     cubel.append(twod)
                         cubelist.append([cubel,call])
     return cubelist
+
+with open('dif_cd_refined.csv','r') as dim:
+    readdim = dim.readlines()
+    allgrids = []
+    for line in readdim[1:]:
+        line = line.split(',')
+        name = line[0].split('\\')[1]
+        allgrids.append(file_to_tfin(name,float(line[5].strip('\n')),7))
