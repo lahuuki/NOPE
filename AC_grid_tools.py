@@ -223,6 +223,8 @@ def file_to_tfin(filename,griddim,gps):
                                     for obj in w:
                                         if any(isinstance(obj,AC) for obj in w):
                                             w = obj.pi
+					else:
+					    w = 7.0
                                     cubew.append(w)
                                     if zplus > 0:
                                         for i in range(zplus):
