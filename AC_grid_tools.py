@@ -246,7 +246,12 @@ def file_to_tfin(filename,griddim,gps):
                                             oned.append([])
                                         twod.append(oned)
                                     cubel.append(twod)
-                        cubelist.append([cubel,call])
+			flatcube = []
+			for x in cubel:
+				for y in cubel[x]:
+					for z in cubel[x][y]:
+						flatcube.append(z)
+                        cubelist.append([struc,cube.position,flatcube,call])
     return cubelist
 
 with open('dif_cd_refined.csv','r') as dim:
