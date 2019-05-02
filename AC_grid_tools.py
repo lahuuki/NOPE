@@ -183,7 +183,7 @@ def file_to_tfin(filename,griddim,gps):
                                 for i in range(gps):
                                     oned = []
                                     for i in range(gps):
-                                        oned.append([])
+                                        oned.append(7)
                                     twod.append(oned)
                                 cubel.append(twod)
                             xs = 0
@@ -199,7 +199,7 @@ def file_to_tfin(filename,griddim,gps):
                                 for i in range(-1*ys):
                                     onel = []
                                     for g in range(gps):
-                                        onel.append([])
+                                        onel.append(7)
                                     cubeh.append(onel)
                                 ys = 0
                             yf = y+int((gps-1)/2)
@@ -212,7 +212,7 @@ def file_to_tfin(filename,griddim,gps):
                                 zs = z-int((gps-1)/2)-1
                                 if zs < 0:
                                     for i in range(-1*zs):
-                                        cubew.append([])
+                                        cubew.append(7)
                                     zs = 0
                                 zf = z+int((gps-1)/2)
                                 zplus = 0
@@ -223,18 +223,18 @@ def file_to_tfin(filename,griddim,gps):
                                     for obj in w:
                                         if any(isinstance(obj,AC) for obj in w):
                                             w = obj.pi
-					else:
-					    w = 7.0
+                                    if w == []:
+                                           w = 7
                                     cubew.append(w)
                                     if zplus > 0:
                                         for i in range(zplus):
-                                            cubew.append([])
+                                            cubew.append(7)
                                 cubeh.append(cubew)
                                 if yplus > 0:
                                     for i in range(yplus):
                                         onel = []
                                         for g in range(gps):
-                                            onel.append([])
+                                            onel.append(7)
                                     cubeh.append(onel)
                             cubel.append(cubeh)
                             if xplus > 0:
@@ -243,14 +243,14 @@ def file_to_tfin(filename,griddim,gps):
                                     for g in range(gps):
                                         oned = []
                                         for g in range(gps):
-                                            oned.append([])
+                                            oned.append(7)
                                         twod.append(oned)
-                                    cubel.append(twod)
-			flatcube = []
-			for x in cubel:
-				for y in cubel[x]:
-					for z in cubel[x][y]:
-						flatcube.append(z)
+                                    cubel.append(twod)    
+                        flatcube = []
+                        for leng in range(len(cubel)):
+                            for hei in range(len(cubel[leng])):
+                                for wid in cubel[leng][hei]:
+                                    flatcube.append(wid)
                         cubelist.append([struc,cube.position,flatcube,call])
     return cubelist
 
@@ -261,3 +261,9 @@ with open('dif_cd_refined.csv','r') as dim:
         line = line.split(',')
         name = line[0].split('\\')[1]
         allgrids.append(file_to_tfin(name,float(line[5].strip('\n')),7))
+
+import csv
+with open('all_grids_1.csv','w',newline = '') as grids:
+    gridwriter = csv.writer(grids,delimiter=',')
+    for row in allgrids:
+        gridwriter.writerow(row)
