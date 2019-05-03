@@ -160,96 +160,60 @@ def subgrid(grid):
 				if z: #if cube is not empty
 					print(f"({ix},{iy},{iz})\t{z[0]}")
 
-def file_to_tfin(filename,griddim,gps):
+					def file_to_tfin(filename,griddim,gps):
     """from file, return subgrids for each AA and its epitope annotation. gps = grids per side of cube """
     """should probably get optimal grid dimensions and then run this on every protein"""
     pro = file_to_grid(filename,griddim)
     struc = get_base_fn(filename)
     cubelist = []
+    toycube = []
+    for ver in range(gps):
+        sheet = []
+        for hor in range(gps):
+            line = []
+            for cell in range(gps):
+                line.append(7)
+            sheet.append(line)
+        toycube.append(sheet)
+                
     for x in range(len(pro)):
         for y in range(len(pro[x])):
             for z in range(len(pro[x][y])):
                 for cube in pro[x][y][z]:
                     if any(isinstance(cube,AC) for cube in pro[x][y][z]):
+                        tempcube = toycube[:]
                         if cube.position in epi_anno[struc]:
                                 call = 1
                         else:
                                 call = 0
-                        cubel = []
-                        xs = x-int((gps-1)/2)-1
+                        xs = x-int((gps-1)/2)
                         if xs < 0:
-                            for i in range(-1*xs):
-                                twod = []
-                                for i in range(gps):
-                                    oned = []
-                                    for i in range(gps):
-                                        oned.append(7)
-                                    twod.append(oned)
-                                cubel.append(twod)
                             xs = 0
-                        xf = x+int((gps-1)/2)
-                        xplus = 0
+                        xf = x+int((gps-1)/2)+1
                         if xf > len(pro):
-                            xplus += (xf-len(pro))
                             xf = len(pro)
-                        for l in pro[xs:xf]:
-                            cubeh = []
-                            ys = y-int((gps-1)/2)-1
+                        for xcount,l in enumerate(pro[xs:xf]):
+                            ys = y-int((gps-1)/2)
                             if ys < 0:
-                                for i in range(-1*ys):
-                                    onel = []
-                                    for g in range(gps):
-                                        onel.append(7)
-                                    cubeh.append(onel)
                                 ys = 0
-                            yf = y+int((gps-1)/2)
-                            yplus = 0
+                            yf = y+int((gps-1)/2)+1
                             if yf > len(l):
-                                yplus += (yf - len(l))
                                 yf = len(l)
-                            for h in l[ys:yf]:
-                                cubew = []
-                                zs = z-int((gps-1)/2)-1
+                            for ycount,h in enumerate(l[ys:yf]):
+                                zs = z-int((gps-1)/2)
                                 if zs < 0:
-                                    for i in range(-1*zs):
-                                        cubew.append(7)
                                     zs = 0
-                                zf = z+int((gps-1)/2)
-                                zplus = 0
+                                zf = z+int((gps-1)/2)+1
                                 if zf > len(h):
-                                    zplus += (zf - len(h))
                                     zf = len(h)
-                                for w in h[zs:zf]:
+                                for zcount,w in enumerate(h[zs:zf]):
                                     for obj in w:
                                         if any(isinstance(obj,AC) for obj in w):
-                                            w = obj.pi
-                                    if w == []:
-                                           w = 7
-                                    cubew.append(w)
-                                    if zplus > 0:
-                                        for i in range(zplus):
-                                            cubew.append(7)
-                                cubeh.append(cubew)
-                                if yplus > 0:
-                                    for i in range(yplus):
-                                        onel = []
-                                        for g in range(gps):
-                                            onel.append(7)
-                                    cubeh.append(onel)
-                            cubel.append(cubeh)
-                            if xplus > 0:
-                                for i in range(xplus):
-                                    twod = []
-                                    for g in range(gps):
-                                        oned = []
-                                        for g in range(gps):
-                                            oned.append(7)
-                                        twod.append(oned)
-                                    cubel.append(twod)    
+                                            tempcube[xcount][ycount][zcount] = obj.pi
                         flatcube = []
-                        for leng in range(len(cubel)):
-                            for hei in range(len(cubel[leng])):
-                                for wid in cubel[leng][hei]:
+                        for leng in range(len(tempcube)):
+                            for hei in range(len(tempcube[leng])):
+                                for wid in tempcube[leng][hei]:
                                     flatcube.append(wid)
                         cubelist.append([struc,cube.position,flatcube,call])
     return cubelist
@@ -262,8 +226,6 @@ with open('dif_cd_refined.csv','r') as dim:
         name = line[0].split('\\')[1]
         allgrids.append(file_to_tfin(name,float(line[5].strip('\n')),7))
 
-import csv
-with open('all_grids_1.csv','w',newline = '') as grids:
-    gridwriter = csv.writer(grids,delimiter=',')
-    for row in allgrids:
-        gridwriter.writerow(row)
+import pickle
+with open('allgrids_v2','wb') as f:
+    pickle.dump(allgrids,f)
