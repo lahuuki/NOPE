@@ -25,4 +25,4 @@ for d in tqdm(allgrids):
     d[2] = (np.array([charge[a] for a in d[2]]))
 
 print("writing data")
-pickle.dump(allgrids,open(f'allgrids_AA_charge{radius}.p','wb'))
+pickle.dump(allgrids,open(f'allgrids_data/allgrids_AA_charge{radius}.p','wb'))
