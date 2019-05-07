@@ -4,4 +4,7 @@ test_AClist = get_alpha_carbon_cif("PDB\\121p.cif")
 
 my_grid = file_to_grid("PDB\\121p.cif", 3)
 
-subgrid(my_grid)
+# tfin = file_to_tfin("PDB\\121p.cif", 3,5)
+# for t in tfin:
+#     print(t)
+subgrid(my_grid, 5)

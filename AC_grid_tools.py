@@ -10,6 +10,7 @@ for e in ea_lines:
 	epi_anno[protein] = epi_list
 
 
+
 class AC(object):
 	def __init__(self, position, aa, x=0, y=0, z=0, epi= False, pi = 5.97):
 		self.position = int(position)
@@ -150,17 +151,18 @@ def file_to_grid(filename, cd):
 		return None
 	grid = draw_grid(acs, cd)
 	n_cubes, max_aa, n_ac_inGrid = grid_info(grid)
-	print(f"{filename} with AC dim {cd} produced a grid with {n_cubes} cubes with {max_aa} per cube")
+	# print(f"{filename} with AC dim {cd} produced a grid with {n_cubes} cubes with {max_aa} per cube")
 	return grid
 
-def subgrid(grid):
-	for ix,x in enumerate(grid):
-		for iy,y in enumerate(x):
-			for iz,z in enumerate(y):
-				if z: #if cube is not empty
-					print(f"({ix},{iy},{iz})\t{z[0]}")
+# def subgrid(grid):
+# 	for ix,x in enumerate(grid):
+# 		for iy,y in enumerate(x):
+# 			for iz,z in enumerate(y):
+# 				if z: #if cube is not empty
+# 					print(f"({ix},{iy},{iz})\t{z[0]}")
+#
 
-					def file_to_tfin(filename,griddim,gps):
+def file_to_tfin(filename,griddim,gps):
     """from file, return subgrids for each AA and its epitope annotation. gps = grids per side of cube """
     """should probably get optimal grid dimensions and then run this on every protein"""
     pro = file_to_grid(filename,griddim)
@@ -172,10 +174,10 @@ def subgrid(grid):
         for hor in range(gps):
             line = []
             for cell in range(gps):
-                line.append(7)
+                line.append("empty")
             sheet.append(line)
         toycube.append(sheet)
-                
+
     for x in range(len(pro)):
         for y in range(len(pro[x])):
             for z in range(len(pro[x][y])):
@@ -209,7 +211,7 @@ def subgrid(grid):
                                 for zcount,w in enumerate(h[zs:zf]):
                                     for obj in w:
                                         if any(isinstance(obj,AC) for obj in w):
-                                            tempcube[xcount][ycount][zcount] = obj.pi
+                                            tempcube[xcount][ycount][zcount] = obj.aa
                         flatcube = []
                         for leng in range(len(tempcube)):
                             for hei in range(len(tempcube[leng])):
@@ -217,15 +219,3 @@ def subgrid(grid):
                                     flatcube.append(wid)
                         cubelist.append([struc,cube.position,flatcube,call])
     return cubelist
-
-with open('dif_cd_refined.csv','r') as dim:
-    readdim = dim.readlines()
-    allgrids = []
-    for line in readdim[1:]:
-        line = line.split(',')
-        name = line[0].split('\\')[1]
-        allgrids.append(file_to_tfin(name,float(line[5].strip('\n')),7))
-
-import pickle
-with open('allgrids_v2','wb') as f:
-    pickle.dump(allgrids,f)
