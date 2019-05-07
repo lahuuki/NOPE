@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
-radius = 13
+radius = 11
 with open('dif_cd_refined.csv','r') as dim:
     readdim = dim.readlines()
     allgrids = []
@@ -22,7 +22,7 @@ charge = dict(zip(AA_data.AA, AA_data.charge))
 
 print("making feature array...")
 for d in tqdm(allgrids):
-    d.append(np.array([charge[a] for a in d[2]]))
+    d[2] = (np.array([charge[a] for a in d[2]]))
 
 print("writing data")
 pickle.dump(allgrids,open(f'allgrids_AA_charge{radius}.p','wb'))
