@@ -177,7 +177,7 @@ def file_to_tfin(filename,griddim,gps):
                 line.append("empty")
             sheet.append(line)
         toycube.append(sheet)
-
+	# Iterate through every amino acid grid in the structure file
     for x in range(len(pro)):
         for y in range(len(pro[x])):
             for z in range(len(pro[x][y])):
