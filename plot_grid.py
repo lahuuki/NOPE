@@ -1,14 +1,11 @@
 import numpy as np
 import seaborn as sns
 import matplotlib.pylab as plt
-from get_alpha_carbon import file_to_grid
 
-def xy_heatmap(filename, dim):
+def xy_heatmap(grid):
 	"""plot a heatmap of the xy dimesion"""
-	print("making grid...")
-	xyz_grid = file_to_grid(filename, dim)
 	xy_grid = []
-	for x in xyz_grid:
+	for x in grid:
 		y_density = []
 		for y in x:
 			y_density.append([len(z) for z in y])
@@ -16,6 +13,18 @@ def xy_heatmap(filename, dim):
 
 	#print(xy_grid)
 	ax = sns.heatmap(xy_grid)
-	plt.title(filename)
+	plt.show()
+	
+def xy_heatmap2(grid):
+	"""plot a heatmap of the xy dimesion"""
+	xy_grid = []
+	for x in grid:
+		y_density = []
+		for y in x:
+			y_density.append([1 for z in y if z != '-'])
+		xy_grid.append([sum(yz) for yz in y_density])
+
+	#print(xy_grid)
+	ax = sns.heatmap(xy_grid)
 	plt.show()
 	
