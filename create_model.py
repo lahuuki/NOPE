@@ -12,7 +12,7 @@ import random
 
 
 print("loading data...")
-data = pickle.load(open("allgrids_AA_charge11.p", "rb"))
+data = pickle.load(open("allgrids_AA_charge13.p", "rb"))
 print(f"{len(data)} data points")
 
 random.shuffle(data)
@@ -30,8 +30,8 @@ test_labels =np.asarray( [d[-1] for d in data[-test_n:]])
 
 model = keras.Sequential([
     # keras.layers.Flatten(input_shape=(3, 343)),
-    keras.layers.Dense(300, activation=tf.nn.relu),
-    keras.layers.Dense(150, activation=tf.nn.relu),
+    # keras.layers.Dense(300, activation=tf.nn.relu),
+    keras.layers.Dense(100, activation=tf.nn.relu),
     keras.layers.Dense(2, activation=tf.nn.softmax)
 ])
 
@@ -67,4 +67,4 @@ all_negative = len(test_labels) - all_positive
 print(f"TEST DATA:{all_positive} ({100*all_positive/len(test_labels):.2f}%) Positive vs. {all_negative} ({100*all_negative/len(test_labels):.2f}%)  Negative")
 print(f"TP: {tp} ({tp/all_positive:.2f})\tFP: {fp}\nTN: {tn} ({tn/all_negative:.2f})\tFN: {fn}")
 
-model.save("NOPE_charge11_300-150n.h5")
+model.save("NOPE_charge13_100n.h5")

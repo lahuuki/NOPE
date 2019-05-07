@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
-radius = 11
+radius = 13
 with open('dif_cd_refined.csv','r') as dim:
     readdim = dim.readlines()
     allgrids = []
