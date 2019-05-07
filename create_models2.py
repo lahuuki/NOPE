@@ -49,28 +49,4 @@ with open("model_results.tsv", "w") as result:
         print("training model...")
         n_epochs = 5
         model.fit(train_data, train_labels, epochs=n_epochs,class_weight=class_weight)
-        print("testing model...")
-        test_loss, test_acc = model.evaluate(test_data, test_labels)
-        print('Test accuracy:', test_acc)
-
-        prediction = model.predict(test_data)
-        tp = 0
-        tn = 0
-        fp = 0
-        fn = 0
-
-        for i,p in enumerate(prediction):
-            if np.argmax(p) == 1:
-                if test_labels[i] == 1:
-                    tp +=1
-                else:
-                    fp +=1
-            else:
-                if test_labels[i] == 0:
-                    tn += 1
-                else:
-                    fn += 1
-        all_positive = sum(test_labels)
-        all_negative = len(test_labels) - all_positive
-        result.write(f"{data_name}\t{all_positive}\t{all_negative}\t{tp}\t{tn}\t{fp}\t{fn}\n")
         model.save(f"models2\\NOPE_{data_name}_100n.h5")
