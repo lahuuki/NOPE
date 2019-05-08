@@ -4,8 +4,13 @@ import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
+"""
+Make the data files used as input for nueral net, save the data files as pickle
+object for later
+"""
+
 radius = 13
-with open('dif_cd_refined.csv','r') as dim:
+with open('cd_data/dif_cd_refined.csv','r') as dim:
     readdim = dim.readlines()
     allgrids = []
     print("Creating grids...")

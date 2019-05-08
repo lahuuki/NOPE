@@ -1,5 +1,0 @@
-model,loss,accuracy,tp,tn,fp,fn
-f{model_fn},{test_loss},{test_acc},{tp},{tn},{fp},{fn}
-f{model_fn},{test_loss},{test_acc},{tp},{tn},{fp},{fn}
-f{model_fn},{test_loss},{test_acc},{tp},{tn},{fp},{fn}
-f{model_fn},{test_loss},{test_acc},{tp},{tn},{fp},{fn}

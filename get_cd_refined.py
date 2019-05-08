@@ -5,7 +5,7 @@ import pandas as pd
 """
 refine max cd to the hundreds place to minimize number of cubes and empty cubes
 """
-data = pd.read_csv("done_cif_cd.csv")
+data = pd.read_csv("cd_data/all_cif_cd.csv")
 max_rt = 120
 refined_cds =[]
 for index,row in data.iterrows():

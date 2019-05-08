@@ -9,7 +9,7 @@ import Bio
 from Bio.PDB import PDBList
 pdbl = PDBList()
 
-with open('searchable.tsv','r') as read:
+with open('searchable_2.tsv','r') as read:
     readfile = read.readlines()
     PDBlist2 = []
     for line in readfile:

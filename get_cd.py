@@ -7,15 +7,11 @@ Test draw grid over all of the input files, get a maximum cube dimension (cd) fo
 some times couses crash...work in progress
 """
 cifs = glob.glob("PDB/*.cif")
-done = [l.split(',')[0] for l in open("done_cif_cd.csv").read().splitlines()[1:]]
-cifs_todo = [c for c in cifs if c not in done]
-print(f"{len(done)}/{len(cifs)} files are done, {len(cifs_todo)} to do")
-
 max_rt = 120
 
-out = open("all_cif_cd.csv", "w")
+out = open("cd_data/all_cif_cd.csv", "w")
 out.write("file,n_AC,n_AC_inGrid,n_cubes,max_cd\n")
-for c in tqdm(cifs_todo):
+for c in tqdm(cifs):
 	result = ""
 	timeout = time.time() + max_rt
 	acs = get_alpha_carbon_cif(c)
