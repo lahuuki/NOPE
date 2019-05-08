@@ -14,7 +14,7 @@ Run charge 13 model on each amino acid in a protein. This is a protype of a
 prediction tool that could be built with this model
 
 input is file name of cif file in pdb format, can only be run with known
-proteins for now. 
+proteins for now.
 """
 
 
@@ -31,7 +31,7 @@ charge = dict(zip(AA_data.AA, AA_data.charge))
 for d in my_data:
     d[2] = (np.array([charge[a] for a in d[2]]))
 
-nope = keras.models.load_model('models2\\NOPE_charge13_100n.h5')
+nope = keras.models.load_model('models/NOPE_charge13_100n.h5')
 my_data_charge = np.asarray([d[2] for d in my_data])
 print(my_data_charge[0].shape)
 pred = nope.predict(my_data_charge)

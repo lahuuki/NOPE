@@ -3,9 +3,23 @@ from __future__ import absolute_import, division, print_function
 # TensorFlow and tf.keras
 from tensorflow import keras
 import pickle
-import glob
+import numpy as np
 
-print("testing model...")
+"""
+Test the models produced by create_models.py
+"""
+results = open("test_models_results.csv", "w")
+results.write("n,model,loss,accuracy,tp,tn,fp,fn\n")
+nums = [7,9,11,13]
+for n in nums:
+    test_fn = f"allgrids_data/allgrids_AA_charge{n}_test.p"
+    model_fn = f"models/NOPE_charge{n}_100n.h5"
+    print(f"data: {test_fn}, model: {model_fn}")
+    test = pickle.load(open(test_fn, "rb"))
+    test_data = np.asarray([d[2] for d in test])
+    test_labels =np.asarray( [d[-1] for d in test])
+
+    model = keras.models.load_model(model_fn)
     test_loss, test_acc = model.evaluate(test_data, test_labels)
     print('Test accuracy:', test_acc)
 
@@ -28,4 +42,4 @@ print("testing model...")
                 fn += 1
     all_positive = sum(test_labels)
     all_negative = len(test_labels) - all_positive
-    result.write(f"{data_name}\t{all_positive}\t{all_negative}\t{tp}\t{tn}\t{fp}\t{fn}\n")
+    results.write(f"{n},{model_fn},{test_loss},{test_acc},{tp},{tn},{fp},{fn}\n")
